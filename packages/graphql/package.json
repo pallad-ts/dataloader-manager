@@ -1,6 +1,6 @@
 {
   "name": "@pallad/dataloader-manager-graphql",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Helper to work with dataloader manager in graphql",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
@@ -28,12 +28,12 @@
   },
   "homepage": "https://github.com/pallad-ts/dataloader-manager#readme",
   "peerDependencies": {
-    "graphql-compose": "^9",
-    "@pallad/dataloader-manager": "*"
+    "@pallad/dataloader-manager": "*",
+    "graphql-compose": "^9"
   },
   "devDependencies": {
-    "graphql-compose": "^9",
-    "@pallad/dataloader-manager": "*"
+    "@pallad/dataloader-manager": "^2.0.1",
+    "graphql-compose": "^9"
   },
   "dependencies": {
     "@pallad/builder": "^1.0.1",
