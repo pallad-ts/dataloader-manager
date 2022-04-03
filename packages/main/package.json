@@ -1,0 +1,37 @@
+{
+  "name": "@pallad/dataloader-manager",
+  "version": "2.0.0",
+  "description": "Allows to easily manage dataloaders instances between requests",
+  "main": "compiled/index.js",
+  "types": "compiled/index.d.ts",
+  "scripts": {
+    "test": "pallad-scripts test",
+    "compile": "pallad-scripts compile",
+    "lint": "pallad-scripts lint",
+    "prepublishOnly": "npm run compile"
+  },
+  "files": [
+    "compiled"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pallad-ts/dataloader-manager.git",
+    "directory": "packages/main"
+  },
+  "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pallad-ts/dataloader-manager/issues"
+  },
+  "homepage": "https://github.com/pallad-ts/dataloader-manager#readme",
+  "peerDependencies": {
+    "dataloader": "^2"
+  },
+  "dependencies": {
+    "@pallad/type-check": "^1.2.0",
+    "alpha-errors": "^0.4.0"
+  }
+}

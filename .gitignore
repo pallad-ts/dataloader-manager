@@ -2,3 +2,4 @@ node_modules
 compiled
 coverage
 *.log
+junit.xml

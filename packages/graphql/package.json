@@ -1,0 +1,43 @@
+{
+  "name": "@pallad/dataloader-manager-graphql",
+  "version": "1.0.0",
+  "description": "Helper to work with dataloader manager in graphql",
+  "main": "compiled/index.js",
+  "types": "compiled/index.d.ts",
+  "scripts": {
+    "test": "pallad-scripts test",
+    "compile": "pallad-scripts compile",
+    "lint": "pallad-scripts lint",
+    "prepublishOnly": "npm run compile"
+  },
+  "files": [
+    "compiled"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pallad-ts/dataloader-manager.git",
+    "directory": "packages/graphql"
+  },
+  "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pallad-ts/dataloader-manager/issues"
+  },
+  "homepage": "https://github.com/pallad-ts/dataloader-manager#readme",
+  "peerDependencies": {
+    "graphql-compose": "^9",
+    "@pallad/dataloader-manager": "*"
+  },
+  "devDependencies": {
+    "graphql-compose": "^9",
+    "@pallad/dataloader-manager": "*"
+  },
+  "dependencies": {
+    "@pallad/builder": "^1.0.1",
+    "alpha-errors": "^0.4.0",
+    "predicates": "^2.0.3"
+  }
+}
