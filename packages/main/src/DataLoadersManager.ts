@@ -3,12 +3,12 @@ import {ERRORS} from "./errors";
 import {DataLoadersScope} from "./DataLoadersScope";
 
 export class DataLoadersManager<TContext> {
-	private factories = new Map<string, DataLoadersManager.Factory<unknown, unknown>>();
+	private factories = new Map<string, DataLoadersManager.Factory<unknown, unknown, TContext>>();
 
 	/**
 	 * Registers factory responsible for creating dataloader of given type
 	 */
-	registerDataLoaderType<TValue = unknown, TKey = string>(type: string, factory: DataLoadersManager.Factory<TValue, TKey>): this {
+	registerDataLoaderType<TValue = unknown, TKey = string>(type: string, factory: DataLoadersManager.Factory<TValue, TKey, TContext>): this {
 		if (this.factories.has(type)) {
 			throw ERRORS.FACTORY_ALREADY_EXISTS.format(type);
 		}
