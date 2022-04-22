@@ -1,6 +1,6 @@
 {
   "name": "@pallad/dataloader-manager",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Allows to easily manage dataloaders instances between requests",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
