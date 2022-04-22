@@ -1,7 +1,7 @@
 import {DataLoadersScope} from '@pallad/dataloader-manager';
 import {ERRORS} from "./errors";
 
-export function assignScopeToContext<TContext>(context: TContext, scope: DataLoadersScope): TContext & { dataLoaders: DataLoadersScope } {
+export function assignScopeToContext<TContext, TDataloadersContext>(context: TContext, scope: DataLoadersScope<TDataloadersContext>): TContext & { dataLoaders: DataLoadersScope<TDataloadersContext> } {
 	return {
 		...context,
 		dataLoaders: scope

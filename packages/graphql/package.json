@@ -39,5 +39,6 @@
     "@pallad/builder": "^1.0.1",
     "alpha-errors": "^0.4.0",
     "predicates": "^2.0.3"
-  }
+  },
+  "gitHead": "810afe00d639a28506694f38d3ed7518fc09d904"
 }
