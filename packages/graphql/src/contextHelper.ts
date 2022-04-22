@@ -8,7 +8,7 @@ export function assignScopeToContext<TContext>(context: TContext, scope: DataLoa
 	};
 }
 
-export function findScopeInContext(context: unknown): DataLoadersScope | undefined {
+export function findScopeInContext<T>(context: unknown): DataLoadersScope<T> | undefined {
 	// eslint-disable-next-line no-null/no-null
 	if (typeof context === 'object' && context !== null) {
 		if ('dataLoaders' in context && DataLoadersScope.isType((context as any).dataLoaders)) {

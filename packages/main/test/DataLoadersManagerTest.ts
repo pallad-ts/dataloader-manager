@@ -3,8 +3,9 @@ import DataLoader = require("dataloader");
 import * as sinon from 'sinon';
 
 describe('DataLoadersManager', () => {
-	let manager: DataLoadersManager;
+	let manager: DataLoadersManager<unknown>;
 
+	const CONTEXT = {some: 'context'};
 	beforeEach(() => {
 		manager = new DataLoadersManager();
 	});
@@ -12,16 +13,17 @@ describe('DataLoadersManager', () => {
 	describe('registering dataloaders', () => {
 		it('success', () => {
 			const stub = sinon.stub().callsFake(() => {
-				return new DataLoader(async () => []);
+				return new DataLoader(() => Promise.resolve([]));
 			});
 
 			manager.registerDataLoaderType('typeA', stub);
 
-			const dataLoader = manager.createDataLoader('typeA');
+			const dataLoader = manager.createDataLoader('typeA', CONTEXT);
 			expect(dataLoader)
 				.toBeInstanceOf(DataLoader);
 
 			sinon.assert.calledOnce(stub);
+			sinon.assert.calledWith(stub, CONTEXT);
 		});
 
 		it('fails if already exists', () => {

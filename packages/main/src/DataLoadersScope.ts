@@ -2,12 +2,13 @@ import {DataLoadersManager} from "./DataLoadersManager";
 import DataLoader = require("dataloader");
 import {TypeCheck} from "@pallad/type-check";
 
-const TYPE_CHECK = new TypeCheck<DataLoadersScope>('@pallad/dataloader-manager/DataLoadersScope');
+const TYPE_CHECK = new TypeCheck<DataLoadersScope<unknown>>('@pallad/dataloader-manager/DataLoadersScope');
 
-export class DataLoadersScope extends TYPE_CHECK.clazz {
+export class DataLoadersScope<TContext> extends TYPE_CHECK.clazz {
 	private dataLoaders = new Map<string, DataLoader<any, any>>();
 
-	constructor(private manager: DataLoadersManager) {
+	constructor(private manager: DataLoadersManager<TContext>,
+				private context: TContext) {
 		super();
 	}
 
@@ -19,7 +20,7 @@ export class DataLoadersScope extends TYPE_CHECK.clazz {
 			return this.dataLoaders.get(type)!;
 		}
 
-		const dataLoader = this.manager.createDataLoader(type);
+		const dataLoader = this.manager.createDataLoader(type, this.context);
 		this.dataLoaders.set(type, dataLoader);
 		return dataLoader as DataLoader<TKey, TValue>;
 	}

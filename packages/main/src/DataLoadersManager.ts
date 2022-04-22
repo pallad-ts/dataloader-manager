@@ -2,7 +2,7 @@ import DataLoader = require("dataloader");
 import {ERRORS} from "./errors";
 import {DataLoadersScope} from "./DataLoadersScope";
 
-export class DataLoadersManager {
+export class DataLoadersManager<TContext> {
 	private factories = new Map<string, DataLoadersManager.Factory<unknown, unknown>>();
 
 	/**
@@ -19,9 +19,9 @@ export class DataLoadersManager {
 	/**
 	 * Creates dataloader of given type
 	 */
-	createDataLoader(type: string) {
+	createDataLoader(type: string, context: TContext) {
 		this.assertType(type);
-		return this.factories.get(type)!();
+		return this.factories.get(type)!(context);
 	}
 
 	private assertType(type: string) {
@@ -33,11 +33,11 @@ export class DataLoadersManager {
 	/**
 	 * Creates new scope of dataloaders
 	 */
-	createScope() {
-		return new DataLoadersScope(this);
+	createScope(context: TContext) {
+		return new DataLoadersScope<TContext>(this, context);
 	}
 }
 
 export namespace DataLoadersManager {
-	export type Factory<TValue = unknown, TKey = string> = () => DataLoader<TKey, TValue>;
+	export type Factory<TValue = unknown, TKey = string, TContext = unknown> = (context: TContext) => DataLoader<TKey, TValue>;
 }
