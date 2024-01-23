@@ -31,8 +31,8 @@
     "dataloader": "^2"
   },
   "dependencies": {
-    "@pallad/type-check": "^1.2.0",
-    "alpha-errors": "^0.4.0"
+    "@pallad/errors": "^1.0.1",
+    "@pallad/type-check": "^1.2.0"
   },
   "gitHead": "810afe00d639a28506694f38d3ed7518fc09d904"
 }

@@ -1,27 +1,37 @@
-import {Builder} from "@pallad/builder";
-import {ERRORS} from "./errors";
-import * as is from 'predicates'
-import {GraphQLID, GraphQLNonNull, GraphQLFieldConfigArgumentMap, GraphQLObjectType} from 'graphql';
-import {ObjectTypeComposer, ObjectTypeComposerFieldConfigAsObjectDefinition, ResolverResolveParams} from "graphql-compose";
-import {GraphQLFieldResolver} from "graphql/type/definition";
-import {assertScopeInContext} from "./contextHelper";
-import {ObjectTypeComposerArgumentConfigMapDefinition} from "graphql-compose/lib/ObjectTypeComposer";
+import { Builder } from "@pallad/builder";
+import { ERRORS } from "./errors";
+import * as is from "predicates";
+import { GraphQLID, GraphQLNonNull, GraphQLObjectType } from "graphql";
+import {
+	ObjectTypeComposer,
+	ObjectTypeComposerFieldConfigAsObjectDefinition,
+	ResolverResolveParams,
+} from "graphql-compose";
+import { GraphQLFieldResolver } from "graphql/type/definition";
+import { assertScopeInContext } from "./contextHelper";
+import { ObjectTypeComposerArgumentConfigMapDefinition } from "graphql-compose/lib/ObjectTypeComposer";
 
-const assertDataLoaderName = is.assert(is.notBlank, 'Dataloader name cannot be empty');
-const assertEntityTypeDefined = is.assert(is.defined, 'Entity type has to be defined in order to create query field');
-const assertEntityTypeIsObjectTypeComposer = is.assert(is.instanceOf(ObjectTypeComposer), 'Entity type must be a type of ObjectTypeComposer');
+const assertDataLoaderName = is.assert(is.notBlank, "Dataloader name cannot be empty");
+const assertEntityTypeDefined = is.assert(
+	is.defined,
+	"Entity type has to be defined in order to create query field"
+);
+const assertEntityTypeIsObjectTypeComposer = is.assert(
+	is.instanceOf(ObjectTypeComposer),
+	"Entity type must be a type of ObjectTypeComposer"
+);
 
-export class GraphQLDataLoaderResolveBuilder<TArgs = any> extends Builder {
+export class GraphQLDataLoaderResolveBuilder<TArgs extends object = any> extends Builder {
 	private keyGetter: (args: TArgs) => any;
 	private entityType?: GraphQLObjectType | ObjectTypeComposer;
 
 	private argsFields: ObjectTypeComposerArgumentConfigMapDefinition<any> = {
 		id: {
-			type: new GraphQLNonNull(GraphQLID)
-		}
+			type: new GraphQLNonNull(GraphQLID),
+		},
 	};
 
-	constructor(private dataLoaderName: string) {
+	constructor(private dataLoaderName: string | number | symbol) {
 		super();
 
 		assertDataLoaderName(this.dataLoaderName);
@@ -29,7 +39,7 @@ export class GraphQLDataLoaderResolveBuilder<TArgs = any> extends Builder {
 		this.keyGetter = (args: TArgs) => {
 			const argsKeys = Object.keys(args);
 			if (argsKeys.length >= 2) {
-				throw ERRORS.COULD_NOT_FIND_KEY_FOR_DATALOADER.format(this.dataLoaderName);
+				throw ERRORS.COULD_NOT_FIND_KEY_FOR_DATALOADER.create(this.dataLoaderName);
 			}
 
 			return argsKeys.length === 0 ? undefined : (args as any)[argsKeys[0]];
@@ -46,7 +56,9 @@ export class GraphQLDataLoaderResolveBuilder<TArgs = any> extends Builder {
 		return this;
 	}
 
-	args<TNewArgs>(args: ObjectTypeComposerArgumentConfigMapDefinition<TNewArgs>): GraphQLDataLoaderResolveBuilder<TNewArgs> {
+	args<TNewArgs extends object>(
+		args: ObjectTypeComposerArgumentConfigMapDefinition<TNewArgs>
+	): GraphQLDataLoaderResolveBuilder<TNewArgs> {
 		this.argsFields = args;
 		return this as unknown as GraphQLDataLoaderResolveBuilder<TNewArgs>;
 	}
@@ -56,23 +68,37 @@ export class GraphQLDataLoaderResolveBuilder<TArgs = any> extends Builder {
 		return this;
 	}
 
-	getResolve<TSource, TContext, TResult>(): GraphQLFieldResolver<TSource, TContext, TArgs, unknown> {
+	getResolve<TSource, TContext, TResult>(): GraphQLFieldResolver<
+		TSource,
+		TContext,
+		TArgs,
+		unknown
+	> {
 		return (source, args, context) => {
 			const key = this.keyGetter(args);
 
 			if (is.empty(key)) {
 				return;
 			}
-			return assertScopeInContext(context).getDataLoader(this.dataLoaderName).load(key) as any;
-		}
+			return assertScopeInContext(context)
+				.getDataLoader(this.dataLoaderName)
+				.load(key) as any;
+		};
 	}
 
-	getQueryField<TSource, TContext>(): ObjectTypeComposerFieldConfigAsObjectDefinition<TSource, TContext, TArgs> {
+	getQueryField<TSource, TContext>(): ObjectTypeComposerFieldConfigAsObjectDefinition<
+		TSource,
+		TContext,
+		TArgs
+	> {
 		this.assertQueryConfig();
 		return {
-			type: this.entityType instanceof GraphQLObjectType ? this.entityType! : this.entityType!.getType(),
+			type:
+				this.entityType instanceof GraphQLObjectType
+					? this.entityType!
+					: this.entityType!.getType(),
 			args: this.argsFields,
-			resolve: this.getResolve()
+			resolve: this.getResolve(),
 		};
 	}
 
@@ -80,7 +106,7 @@ export class GraphQLDataLoaderResolveBuilder<TArgs = any> extends Builder {
 		assertEntityTypeDefined(this.entityType);
 	}
 
-	getResolver(name: string = 'findById') {
+	getResolver(name: string = "findById") {
 		this.assertResolverConfig();
 
 		const entityType = this.entityType as ObjectTypeComposer;
@@ -88,11 +114,14 @@ export class GraphQLDataLoaderResolveBuilder<TArgs = any> extends Builder {
 		const resolve = this.getResolve();
 		entityType.addResolver({
 			name,
-			type: this.entityType instanceof GraphQLObjectType ? this.entityType! : this.entityType!.getType(),
+			type:
+				this.entityType instanceof GraphQLObjectType
+					? this.entityType!
+					: this.entityType!.getType(),
 			args: this.argsFields,
 			resolve: (rp: ResolverResolveParams<any, any>) => {
 				return resolve(rp.source, rp.args, rp.context, rp.info);
-			}
+			},
 		});
 
 		return entityType.getResolver(name);
@@ -102,5 +131,4 @@ export class GraphQLDataLoaderResolveBuilder<TArgs = any> extends Builder {
 		assertEntityTypeDefined(this.entityType);
 		assertEntityTypeIsObjectTypeComposer(this.entityType);
 	}
-
 }
