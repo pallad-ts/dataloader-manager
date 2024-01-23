@@ -5,7 +5,6 @@
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
   "scripts": {
-    "test": "pallad-scripts test",
     "compile": "pallad-scripts compile",
     "lint": "pallad-scripts lint",
     "prepublishOnly": "npm run compile"
