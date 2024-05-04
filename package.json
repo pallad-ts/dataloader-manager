@@ -1,10 +1,12 @@
 {
   "private": true,
   "devDependencies": {
+    "@pallad/errors-dev": "^1.1.0",
     "@pallad/scripts": "^3",
+    "@types/sinon": "^17.0.3",
     "lerna": "^8.0.0",
-    "sinon": "^17",
-    "prettier": "^3.1.0"
+    "prettier": "^3.1.0",
+    "sinon": "^17.0.1"
   },
   "workspaces": [
     "packages/*"

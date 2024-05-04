@@ -1,7 +1,7 @@
-import { DataLoadersScope } from "@pallad/dataloader-manager";
+import { Scope } from "./Scope";
 import { ERRORS } from "./errors";
 
-export function assignScopeToContext<TContext, TScope extends DataLoadersScope<any, any>>(
+export function assignScopeToContext<TContext, TScope extends Scope<any>>(
 	context: TContext,
 	scope: TScope
 ): TContext & {
@@ -13,17 +13,15 @@ export function assignScopeToContext<TContext, TScope extends DataLoadersScope<a
 	};
 }
 
-export function findScopeInContext<T extends DataLoadersScope<any, any>>(
-	context: unknown
-): T | undefined {
+export function findScopeInContext<T extends Scope<any>>(context: unknown): T | undefined {
 	// eslint-disable-next-line no-null/no-null
 	if (typeof context === "object" && context !== null) {
-		if ("dataLoaders" in context && DataLoadersScope.isType((context as any).dataLoaders)) {
+		if ("dataLoaders" in context && Scope.isType((context as any).dataLoaders)) {
 			return (context as any).dataLoaders;
 		}
 
 		for (const value of Object.values(context)) {
-			if (DataLoadersScope.isType(value)) {
+			if (Scope.isType(value)) {
 				return value as T;
 			}
 		}

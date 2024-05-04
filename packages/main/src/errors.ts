@@ -6,11 +6,15 @@ export const ERRORS = errorsDomain.addErrorsDescriptorsMap({
 	FACTORY_ALREADY_EXISTS: ErrorDescriptor.useMessageFormatter(
 		code(1),
 		(factoryName: string | number | symbol) =>
-			`Factory "${factoryName.toString()}" already exists`
+			`Factory for dataloader "${factoryName.toString()}" already exists`
 	),
-	DATALOADER_DOES_NOT_EXIST: ErrorDescriptor.useMessageFormatter(
+	UNDEFINED_DATALOADER_FACTORY: ErrorDescriptor.useMessageFormatter(
 		code(2),
 		(dataLoaderName: string | number | symbol) =>
-			`Dataloader "${dataLoaderName.toString()}" does not exist`
+			`Factory for dataloader "${dataLoaderName.toString()}" is not defined. Have you forgotten to call 'useFactory' or 'overrideFactory'?`
+	),
+	SCOPE_NOT_FOUND_IN_CONTEXT: ErrorDescriptor.useDefaultMessage(
+		code(3),
+		"DataLoaders scope not found in context. Ensure you have enriched context"
 	),
 });

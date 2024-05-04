@@ -1,7 +1,7 @@
-export * from "./DataLoadersManager";
-export * from "./DataLoadersScope";
+export * from "./Scope";
 export * from "./errors";
-export * from "./DataLoaderMap";
+export * from "./Placeholder";
+export * from "./contextHelper";
 import DataLoader = require("dataloader");
 import Dataloader = require("dataloader");
 
